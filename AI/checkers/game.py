@@ -1,16 +1,18 @@
 import pygame
-from .constants import RED, WHITE, BLUE, SQUARE_SIZE
+from .constants import RED, WHITE, BLUE, SQUARE_SIZE, ROWS, COLS
 from checkers.board import Board
 
 class Game:
     def __init__(self, win):
         self._init()
         self.win = win
+        self.stale = False
     
     def update(self):
         self.board.draw(self.win)
         self.draw_valid_moves(self.valid_moves)
         pygame.display.update()
+        self.checkStaleMate()
 
     def _init(self):
         self.selected = None
@@ -19,7 +21,10 @@ class Game:
         self.valid_moves = {}
 
     def winner(self):
-        return self.board.winner()
+        if(self.stale):
+            return self.stale
+        else:
+            return self.board.winner()
 
     def reset(self):
         self._init()
@@ -38,6 +43,24 @@ class Game:
             return True
             
         return False
+
+    def checkStaleMateColor(self, color):
+        for row in range(ROWS):
+            for col in range(COLS):
+                piece = self.board.get_piece(row, col)
+                if piece != 0 and piece.color == color:
+                    valid_moves = self.board.get_valid_moves(piece)
+                    if valid_moves:
+                        return False
+        return True
+
+    def checkStaleMate(self):
+        if(self.checkStaleMate(RED) and self.checkStaleMateColor(WHITE)):
+            self.stale = (999,999,999)
+        if(self.checkStaleMateColor(RED)):
+            self.stale = (255, 0, 0)
+        elif(self.checkStaleMateColor(WHITE)):
+            self.stale = (255, 255, 255)
 
     def _move(self, row, col):
         piece = self.board.get_piece(row, col)
