@@ -55,7 +55,7 @@ class Game:
         return True
 
     def checkStaleMate(self):
-        if(self.checkStaleMate(RED) and self.checkStaleMateColor(WHITE)):
+        if(self.checkStaleMateColor(RED) and self.checkStaleMateColor(WHITE)):
             self.stale = (999,999,999)
         if(self.checkStaleMateColor(RED)):
             self.stale = (255, 0, 0)
