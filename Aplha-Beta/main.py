@@ -10,6 +10,7 @@ WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Checkers')
 
 MOVETIMES = []
+EXPANSIONSPERMOVE = []
 
 def get_row_col_from_mouse(pos):
     x, y = pos
@@ -27,11 +28,12 @@ def main():
         
         if game.turn == WHITE:
             st = time.time()
-            value, new_board = minimax(game.get_board(), 4, WHITE, game, float('-inf'), float('inf'))
+            value, new_board, expansions= minimax(game.get_board(), 4, WHITE, game, float('-inf'), float('inf'))
             game.ai_move(new_board)
             et = time.time()
             print("Decision time: ", et-st)
             MOVETIMES.append(et-st)
+            EXPANSIONSPERMOVE.append(expansions)
 
         if game.winner() != None:
             if(game.winner() == RED):
@@ -40,7 +42,9 @@ def main():
                 print("White Wins!")
             else:
                 print("Stalemate - draw")
-            print("Average move time: ", sum(MOVETIMES)/len(MOVETIMES))
+            print("Average move time with pruning: ", sum(MOVETIMES)/len(MOVETIMES))
+            print("Average expansions per move: ", sum(EXPANSIONSPERMOVE)/len(EXPANSIONSPERMOVE))
+            print("Total expansions: ", sum(EXPANSIONSPERMOVE))
             run = False
 
         for event in pygame.event.get():
