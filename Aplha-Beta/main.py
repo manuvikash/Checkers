@@ -11,7 +11,6 @@ pygame.display.set_caption('Checkers')
 
 MOVETIMES = []
 
-
 def get_row_col_from_mouse(pos):
     x, y = pos
     row = y // SQUARE_SIZE
@@ -28,7 +27,7 @@ def main():
         
         if game.turn == WHITE:
             st = time.time()
-            value, new_board = minimax(game.get_board(), 4, WHITE, game)
+            value, new_board = minimax(game.get_board(), 4, WHITE, game, float('-inf'), float('inf'))
             game.ai_move(new_board)
             et = time.time()
             print("Decision time: ", et-st)
