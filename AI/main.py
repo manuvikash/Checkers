@@ -33,6 +33,7 @@ def main():
             game.ai_move(new_board)
             et = time.time()
             print("Decision time: ", et-st)
+            print("Expansions: ", expansions)
             MOVETIMES.append(et-st)
             EXPANSIONSPERMOVE.append(expansions)
 
